@@ -1,0 +1,7 @@
+# Default owner for all files in this repository
+* @SevenOfNine-ai
+
+# Release-critical paths
+/.github/workflows/* @SevenOfNine-ai
+/openpackage.yml @SevenOfNine-ai
+/root/pc-win-de-keyboard.bundle/** @SevenOfNine-ai

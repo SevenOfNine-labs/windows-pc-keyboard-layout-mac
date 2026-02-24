@@ -1,54 +1,38 @@
-# Deutsches Windows-PC-Tastaturlayout für macOS
+# German Windows-PC Keyboard Layout for macOS
 
-Dieses Repository enthält ein deutsches Windows-PC-Tastaturlayout für macOS.
+German keyboard layout for macOS with Windows-PC-like special-character key positions.
 
-Windows-PC-Tastaturlayout bedeutet in diesem Fall, dass die Sonderzeichen (z.B. `{` oder `]`) an der gleichen Stelle liegen wie auf einer Windows-PC-Tastatur.
+## Quick Start
 
-## Sonderzeichen
+### OpenPackage
 
-Unterstützte Sonderzeichen bei gedrückter `Alt`-Taste:
+```bash
+npm install -g opkg
+opkg install gh@SevenOfNine-ai/windows-pc-keyboard-layout-mac@v1.0.3
+bash install-macos.sh
+```
 
-![Tastatur-Layout bei gedrückter Alt-Taste](images/keyboard-alt.png)
+Note: In `gh@...` syntax, the version is a Git ref. This repository tags releases as `vX.Y.Z`, so use `@v1.0.3` (not `@1.0.3`).
 
-## Dead-Keys
+### Clone and Install
 
-Die Zeichen <kbd>^</kbd>, <kbd>\`</kbd> und <kbd>´</kbd> sind Dead-Keys.
+```bash
+git clone https://github.com/SevenOfNine-ai/windows-pc-keyboard-layout-mac.git
+cd windows-pc-keyboard-layout-mac
+# Required: fetch Git LFS binary assets (images/icon files)
+git lfs pull
+mkdir -p ~/Library/Keyboard\ Layouts
+cp -R root/pc-win-de-keyboard.bundle ~/Library/Keyboard\ Layouts/
+```
 
-Das Zeichen <kbd>~</kbd> ist kein Dead-Key.
+## Documentation
 
-## Installation
+Full documentation is in `docs/`:
 
-Das `.dmg`-Image herunterladen (siehe Releases) und Anweisungen folgen.
-
-Alternativ: Dieses Repository clonen und das Bundle `pc-win-de-keyboard.bundle` nach `/Library/Keyboard Layouts` kopieren. (Tipp: Im Finder `Cmd+Shift+G`.)
-
-## Aktivieren
-
-Das Layout wird über die **Systemeinstellungen** -> **Tastatur** -> **Eingabequellen** aktiviert. Hier auf das `+` unten links klicken.
-
-![Tastaturlayout hinzufügen](images/add-keyboard-layout1.png)
-
-Dann die Sprache **Deutsch** und hier das Layout **Deutsch - PC** auswählen.
-
-![Tastaturlayout auswählen](images/add-keyboard-layout2.png)
-
-Das bisherigen Layout kann man dann per `-` Knopf entfernen (um versehentliches Zurückwechseln zum bisherigen Layout zu verhindern.) Siehe aber auch den nächsten Abschnitt.
-
-## Tastaturlayout im Anmeldebildschirm
-
-Leider können im Anmelde-/Sperrbildschirm keine eigenen Tastaturlayouts verwendet werden. (Hier funktionieren nur die, die mit macOS ausgeliefert werden.)
-
-Sofern als [Systemsprache](https://support.apple.com/de-de/HT202036) Deutsch verwendet wird, wird im Anmeldebildschirm einfach das Tastaturlayout "Deutsch" verwendet. (Ist auf dem Mac nur ein Benutzer vorhanden, entspricht die Systemsprache immer automatisch der Benutzersprache.)
-
-Ist die Systemsprache eine andere (z.B. Englisch), dann gilt:
-
-* Ist beim Benutzer das Tastaturlayout "Deutsch" in den Eingabequellen hinterlegt (muss *nicht* aktiv sein), wird "Deutsch" als Tastaturlayout im Anmeldebildschirm verwendet.
-* Ansonsten wird ein englisches Tastaturlayout (US oder Britisch) verwendet.
-
-Das bedeutet: Ist die Systemsprache Englisch, darf das von macOS mitgelieferte Tastaturlayout "Deutsch" *nicht* entfernt werden!
-
-## Bearbeiten des Layouts
-
-Das Layout bearbeitet man am besten mit dem Tool [Ukulele](https://software.sil.org/ukelele/).
-
-Das `.dmg`-Image zum Verteilen erstellt man in Ukulele über das Menü: File -> Export Installer Disk Image...
+- [Docs Home](docs/readme.md)
+- [Installation](docs/installation.md)
+- [Known Limitations](docs/limitations.md)
+- [Security](docs/security.md)
+- [OpenPackage Publishing](docs/openpackage-publishing.md)
+- [Contributing](docs/contributing.md)
+- [Full Security Audit](docs/security-audit.md)

@@ -1,0 +1,95 @@
+name: openpackage-publish
+
+on:
+  release:
+    types:
+      - published
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: release
+    steps:
+      - name: Verify authorized release actor
+        run: |
+          set -euo pipefail
+
+          if [ "${GITHUB_ACTOR}" != "SevenOfNine-ai" ]; then
+            echo "Only SevenOfNine-ai may run this release publish workflow."
+            echo "Current actor: ${GITHUB_ACTOR}"
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install OpenPackage CLI
+        run: npm install --global opkg
+
+      - name: Validate tag matches openpackage.yml version
+        if: github.event_name == 'release'
+        run: |
+          set -euo pipefail
+
+          PACKAGE_NAME="$(awk -F': *' '/^name:/{print $2; exit}' openpackage.yml | tr -d '"' | xargs)"
+          PACKAGE_VERSION="$(awk -F': *' '/^version:/{print $2; exit}' openpackage.yml | tr -d '"' | xargs)"
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+
+          if ! [[ "$PACKAGE_NAME" =~ ^@[^/]+/[^@]+$ ]]; then
+            echo "openpackage.yml name must be scoped (for example: @scope/package-name)"
+            echo "Current name: $PACKAGE_NAME"
+            exit 1
+          fi
+
+          if [ -z "$PACKAGE_VERSION" ]; then
+            echo "openpackage.yml version is missing"
+            exit 1
+          fi
+
+          if [ "$TAG_VERSION" != "$PACKAGE_VERSION" ]; then
+            echo "Tag/version mismatch: tag=$TAG_VERSION openpackage.yml=$PACKAGE_VERSION"
+            exit 1
+          fi
+
+      - name: Publish package
+        env:
+          OPENPACKAGE_API_KEY: ${{ secrets.OPENPACKAGE_API_KEY }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${OPENPACKAGE_API_KEY:-}" ]; then
+            echo "Missing OPENPACKAGE_API_KEY secret"
+            exit 1
+          fi
+
+          PACKAGE_NAME="$(awk -F': *' '/^name:/{print $2; exit}' openpackage.yml | tr -d '"' | xargs)"
+          PACKAGE_VERSION="$(awk -F': *' '/^version:/{print $2; exit}' openpackage.yml | tr -d '"' | xargs)"
+
+          STAGE_DIR="$(mktemp -d)"
+          trap 'rm -rf "$STAGE_DIR"' EXIT
+
+          cp openpackage.yml "$STAGE_DIR/openpackage.yml"
+          cp openpackage.yml "$STAGE_DIR/package.yml"
+          cp README.md "$STAGE_DIR/README.md"
+          cp -R root "$STAGE_DIR/root"
+
+          cd "$STAGE_DIR"
+
+          if opkg publish -h 2>&1 | grep -q "Usage: openpackage publish"; then
+            opkg publish --api-key "$OPENPACKAGE_API_KEY"
+          elif opkg push -h 2>&1 | grep -q "Usage: openpackage push"; then
+            opkg push "${PACKAGE_NAME}@${PACKAGE_VERSION}" --api-key "$OPENPACKAGE_API_KEY"
+          else
+            echo "No supported publish command found in installed opkg version"
+            exit 1
+          fi

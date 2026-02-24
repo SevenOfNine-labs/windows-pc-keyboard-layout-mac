@@ -7,7 +7,7 @@
 	<key>CFBundleName</key>
 	<string>pc-win-de-keyboard</string>
 	<key>CFBundleVersion</key>
-	<string></string>
+	<string>1.0.3</string>
 	<key>KLInfo_German - PC</key>
 	<dict>
 		<key>TICapsLockLanguageSwitchCapable</key>

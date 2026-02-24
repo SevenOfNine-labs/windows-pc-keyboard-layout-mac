@@ -1,0 +1,8 @@
+name: "@sevenofnine/windows-pc-keyboard-layout-mac"
+version: "1.0.3"
+description: "German Windows PC keyboard layout for macOS (bundle + installer script)"
+keywords: [keyboard-layout, macos, german, windows-pc]
+author: "SevenOfNine-ai"
+license: "MIT"
+homepage: "https://github.com/SevenOfNine-ai/windows-pc-keyboard-layout-mac"
+repository: "https://github.com/SevenOfNine-ai/windows-pc-keyboard-layout-mac.git"

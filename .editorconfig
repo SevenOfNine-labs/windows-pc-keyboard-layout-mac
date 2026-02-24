@@ -28,7 +28,7 @@ insert_final_newline = true
 # Markdown
 #
 [*.md]
-charset = utf-8-bom
+charset = utf-8
 
 # For explanation why spaces are used for Markdown, see: https://github.com/skrysmanski/base/blob/master/docs/markdown-indentation.md
 indent_style = space
